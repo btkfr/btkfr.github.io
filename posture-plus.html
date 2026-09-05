@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Posture+ — Bailey Kinney</title>
+<meta name="description" content="Posture+ is a wearable posture-sensing prototype built with dual ADXL345 accelerometers and embedded MicroPython, developed by Bailey Kinney for a WNEU smart systems project.">
+<meta property="og:title" content="Posture+ — Bailey Kinney">
+<meta property="og:description" content="A wearable posture-sensing prototype using dual accelerometers and embedded MicroPython to detect slouching in real time.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://baileykinney.com/posture-plus.html">
+<meta property="og:image" content="https://baileykinney.com/assets/pp-blueprint.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Posture+ — Bailey Kinney">
+<meta name="twitter:description" content="A wearable posture-sensing prototype using dual accelerometers and embedded MicroPython to detect slouching in real time.">
+<meta name="twitter:image" content="https://baileykinney.com/assets/pp-blueprint.png">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="assets/favicon.ico" sizes="any">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #F4F0E8; --cream-deep: #ECE5D6; --navy: #1A2B3D; --navy-soft: #35485D;
+    --amber: #D9A441; --amber-deep: #8a6a26; --line: #D8D0BC; --white: #FFFEFB;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--cream); color: var(--navy); font-family: 'Inter', -apple-system, sans-serif; line-height: 1.6; }
+  h1, h2, h3, .serif { font-family: 'Fraunces', Georgia, serif; }
+  a { color: inherit; }
+  img { max-width: 100%; display: block; }
+  .wrap { max-width: 860px; margin: 0 auto; padding: 0 28px; }
+
+  header { position: sticky; top: 0; z-index: 10; background: rgba(244,240,232,0.92); backdrop-filter: blur(6px); border-bottom: 1px solid var(--line); }
+  header .wrap { display: flex; align-items: center; justify-content: space-between; height: 64px; }
+  .brand { font-family: 'Fraunces', serif; font-weight: 600; font-size: 18px; text-decoration: none; }
+  nav ul { list-style: none; display: flex; gap: 28px; }
+  nav a { text-decoration: none; font-size: 14px; color: var(--navy-soft); }
+  nav a:hover { color: var(--navy); }
+
+  .back-link { display: inline-block; margin-top: 40px; font-size: 13px; color: var(--navy-soft); text-decoration: none; }
+  .back-link:hover { color: var(--navy); }
+
+  .p-hero { padding: 20px 0 32px; }
+  .eyebrow { font-size: 13px; color: var(--amber-deep); font-weight: 500; margin-bottom: 12px; }
+  .p-hero h1 { font-size: 38px; font-weight: 600; max-width: 18ch; }
+  .p-hero .dek { margin-top: 16px; font-size: 17px; color: var(--navy-soft); max-width: 62ch; }
+  .stack { margin-top: 20px; display: flex; gap: 8px; flex-wrap: wrap; }
+  .chip { font-size: 12px; padding: 4px 10px; border: 1px solid var(--line); border-radius: 2px; color: var(--navy-soft); }
+  .status-note { display: inline-block; margin-top: 16px; font-size: 12px; color: var(--amber-deep); border: 1px solid var(--amber); padding: 4px 10px; border-radius: 2px; }
+
+  .hero-img { margin-top: 28px; border-radius: 4px; overflow: hidden; border: 1px solid var(--line); }
+  figure { margin: 0; }
+  figcaption { font-size: 12px; color: var(--navy-soft); margin-top: 8px; }
+
+  .role-note {
+    background: var(--white); border-left: 3px solid var(--amber);
+    padding: 16px 20px; margin-top: 20px; font-size: 14px; color: var(--navy-soft); max-width: 62ch;
+  }
+  .role-note strong { color: var(--navy); }
+
+  section { padding: 44px 0; border-top: 1px solid var(--line); }
+  .section-head { margin-bottom: 22px; }
+  .section-head h2 { font-size: 22px; font-weight: 600; }
+  section p { color: var(--navy-soft); max-width: 66ch; margin-top: 10px; }
+
+  .img-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 20px; }
+  .img-grid.four { grid-template-columns: 1fr 1fr; }
+
+  .step-list { margin-top: 20px; }
+  .step { display: flex; gap: 18px; padding: 14px 0; border-bottom: 1px solid var(--line); }
+  .step:last-child { border-bottom: none; }
+  .step .idx { font-family: 'Fraunces', serif; font-size: 18px; color: var(--amber-deep); flex: 0 0 28px; }
+  .step .body h3 { font-size: 15px; font-weight: 600; }
+  .step .body p { margin-top: 4px; font-size: 14px; }
+
+  .finding-card {
+    background: var(--white); border-left: 3px solid var(--navy);
+    padding: 20px 24px; margin-top: 20px; max-width: 66ch;
+  }
+  .finding-card p { margin-top: 0; font-size: 14px; }
+  .finding-card p + p { margin-top: 10px; }
+
+  footer { padding: 40px 0 60px; }
+  footer .wrap { display: flex; justify-content: space-between; font-size: 13px; color: var(--navy-soft); }
+
+  @media (max-width: 640px) {
+    .p-hero h1 { font-size: 28px; }
+    .img-grid, .img-grid.four { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <a class="brand" href="index.html">Bailey Kinney</a>
+    <nav>
+      <ul>
+        <li><a href="index.html#projects">Projects</a></li>
+        <li><a href="index.html#experience">Experience</a></li>
+        <li><a href="index.html#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <a class="back-link" href="index.html#projects">← Back to projects</a>
+
+  <div class="p-hero">
+    <div class="eyebrow">Smart Project · ENG-110 · 2026</div>
+    <h1>Posture+</h1>
+    <p class="dek">A wearable posture-sensing prototype that compares accelerometer readings from two points on the back and gives vibration feedback when it detects slouching. Built with a cross-functional team of business and engineering students.</p>
+    <div class="stack">
+      <span class="chip">Raspberry Pi Pico 2W</span>
+      <span class="chip">Dual ADXL345 (I2C)</span>
+      <span class="chip">MicroPython</span>
+      <span class="chip">Cross-functional team</span>
+    </div>
+    <div class="status-note">In progress — prototyping phase</div>
+
+    <div class="hero-img">
+      <img src="assets/pp-blueprint.png" alt="Blueprint-style concept visualization of the Posture+ wearable showing sensor and connector placement">
+    </div>
+
+    <div class="role-note">
+      <strong>My role:</strong> primary MicroPython programmer, sensor setup, wiring, nearly all of the soldering, assembly support, testing, concept development, and prototype presentation.
+    </div>
+  </div>
+
+  <section>
+    <div class="section-head">
+      <div class="eyebrow">The problem</div>
+      <h2>Posture is easy to ignore, hard to fix alone</h2>
+    </div>
+    <p>Poor posture is a common problem for office workers, students, and seniors who spend long hours seated, and it's easy to fall back into old habits without a reminder. The goal was a wearable that could tell the difference between an actual slouch and normal movement, then give immediate physical feedback instead of relying on the wearer to notice.</p>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <div class="eyebrow">Concept development</div>
+      <h2>Four concepts, one weighted matrix</h2>
+    </div>
+    <p>The team sketched four directions before picking one to build. Each was scored against weighted criteria — comfort, efficiency, breathability, performance, size, durability, customization, and ease of manufacturing.</p>
+    <div class="img-grid four">
+      <figure>
+        <img src="assets/pp-concept-sportsbra.png" alt="Posture Plus Sports Bra Pro concept sketch with smart posture sensor and bluetooth tracking">
+        <figcaption>Concept 1 — Posture+ Sports Bra Pro. Ranked highest overall.</figcaption>
+      </figure>
+      <figure>
+        <img src="assets/pp-concept-shock.png" alt="Controlled shock posture corrector concept sketch, front and rear views">
+        <figcaption>Concept 2 — Posture+ Vibrate (controlled shock/vibration vest).</figcaption>
+      </figure>
+      <figure>
+        <img src="assets/pp-concept-gyroscope.png" alt="Gyroscope posture corrector concept sketch with primary and secondary sensors">
+        <figcaption>Concept 3 — Gyroscope Posture Corrector. Became the build direction.</figcaption>
+      </figure>
+      <figure>
+        <img src="assets/pp-concept-chair.png" alt="Posture Plus Corrector Pro concept sketch with chair attachment and emergency release">
+        <figcaption>Concept 4 — Posture+ Corrector Pro, with a chair-tether attachment (reference concept).</figcaption>
+      </figure>
+    </div>
+    <img src="assets/pp-matrix-weighted.png" alt="Weighted concept screening matrix scoring all four posture concepts across eight criteria" style="margin-top:20px; border:1px solid var(--line); border-radius:4px;">
+    <p style="font-size:13px; margin-top:8px;">The Sports Bra Pro concept scored highest overall, but the gyroscope-based sensing approach — strong on customization and comfort — became the technical foundation we actually built and tested.</p>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <div class="eyebrow">Approach</div>
+      <h2>From concept to prototype</h2>
+    </div>
+    <div class="step-list">
+      <div class="step">
+        <div class="idx">01</div>
+        <div class="body">
+          <h3>Customer validation</h3>
+          <p>Ran a 15-person customer survey to check feature priorities and expectations before committing to a build.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="idx">02</div>
+        <div class="body">
+          <h3>Hardware</h3>
+          <p>Built the wearable around a Raspberry Pi Pico 2W with dual ADXL345 accelerometers over I2C — one sensor on the upper back, one on the lower back — to compare orientation between the two points.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="idx">03</div>
+        <div class="body">
+          <h3>Signal processing</h3>
+          <p>Wrote about 200 lines of MicroPython to clean the raw accelerometer data: a median-3 filter, outlier rejection, and an IIR low-pass filter, feeding into a fixed angle-difference condition with handling for bent-over posture to reduce false alerts.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="idx">04</div>
+        <div class="body">
+          <h3>Build</h3>
+          <p>Configured and placed the sensors, wired the full system, soldered everything except the direct sensor connections, and helped assemble the wearable prototype.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <div class="eyebrow">What testing revealed</div>
+      <h2>Honest results, not a polished number</h2>
+    </div>
+    <div class="finding-card">
+      <p>Informal testing showed the sensing and vibration concept could work, but the short development schedule left real sensor-placement and reliability issues. An early ~90% figure came up during testing, but it was an informal observation from a handful of runs, not a controlled accuracy measurement — worth being upfront about rather than presenting it as a validated result.</p>
+      <p>Next iteration: improve sensor placement and mounting stability, tighten wiring reliability, define an actual test protocol, and better separate slouching from bending and normal movement.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <div class="eyebrow">Presented</div>
+      <h2>2026 WNEU Emerging Engineers Expo</h2>
+    </div>
+    <p>Presented the prototype and concept alongside the team's business proposal — customer research, value proposition, and bill of materials.</p>
+    <img src="assets/pp-expo-poster.jpg" alt="Posture Plus expo poster with customer research, value proposition, features, and bill of materials" style="margin-top:20px; border:1px solid var(--line); border-radius:4px;">
+  </section>
+
+</div>
+
+<footer>
+  <div class="wrap">
+    <span>Bailey Kinney · Springfield, MA</span>
+    <a href="index.html#contact">Get in touch →</a>
+  </div>
+</footer>
+
+</body>
+</html>
