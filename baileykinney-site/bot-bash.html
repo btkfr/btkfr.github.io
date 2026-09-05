@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rescue and navigation robotics — Bailey Kinney</title>
+<meta name="description" content="Case study of Bot Bash, a two-part robotics competition: rescue robots and an autonomous maze rover built by a four-person team led by Bailey Kinney, using SolidWorks, Python, and IR sensor control logic.">
+<meta property="og:title" content="Rescue and navigation robotics — Bailey Kinney">
+<meta property="og:description" content="A two-part robotics competition: rescue robots and an autonomous maze rover, built and led by Bailey Kinney using SolidWorks, Python, and IR sensors.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://baileykinney.com/bot-bash.html">
+<meta property="og:image" content="https://baileykinney.com/assets/bb-rescue-final-front.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Rescue and navigation robotics — Bailey Kinney">
+<meta name="twitter:description" content="A two-part robotics competition: rescue robots and an autonomous maze rover, built and led by Bailey Kinney using SolidWorks, Python, and IR sensors.">
+<meta name="twitter:image" content="https://baileykinney.com/assets/bb-rescue-final-front.png">
+<meta name="description" content="Case study on Bot Bash 2025: two competition robots built with SolidWorks, Python, and IR sensors, covering concept screening, iteration, and results.">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="assets/favicon.ico" sizes="any">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #F4F0E8; --cream-deep: #ECE5D6; --navy: #1A2B3D; --navy-soft: #35485D;
+    --amber: #D9A441; --amber-deep: #8a6a26; --line: #D8D0BC; --white: #FFFEFB;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--cream); color: var(--navy); font-family: 'Inter', -apple-system, sans-serif; line-height: 1.6; }
+  h1, h2, h3, .serif { font-family: 'Fraunces', Georgia, serif; }
+  a { color: inherit; }
+  img { max-width: 100%; display: block; }
+  .wrap { max-width: 860px; margin: 0 auto; padding: 0 28px; }
+
+  header { position: sticky; top: 0; z-index: 10; background: rgba(244,240,232,0.92); backdrop-filter: blur(6px); border-bottom: 1px solid var(--line); }
+  header .wrap { display: flex; align-items: center; justify-content: space-between; height: 64px; }
+  .brand { font-family: 'Fraunces', serif; font-weight: 600; font-size: 18px; text-decoration: none; }
+  nav ul { list-style: none; display: flex; gap: 28px; }
+  nav a { text-decoration: none; font-size: 14px; color: var(--navy-soft); }
+  nav a:hover { color: var(--navy); }
+
+  .back-link { display: inline-block; margin-top: 40px; font-size: 13px; color: var(--navy-soft); text-decoration: none; }
+  .back-link:hover { color: var(--navy); }
+
+  .p-hero { padding: 20px 0 32px; }
+  .eyebrow { font-size: 13px; color: var(--amber-deep); font-weight: 500; margin-bottom: 12px; }
+  .p-hero h1 { font-size: 38px; font-weight: 600; max-width: 20ch; }
+  .p-hero .dek { margin-top: 16px; font-size: 17px; color: var(--navy-soft); max-width: 62ch; }
+  .stack { margin-top: 20px; display: flex; gap: 8px; flex-wrap: wrap; }
+  .chip { font-size: 12px; padding: 4px 10px; border: 1px solid var(--line); border-radius: 2px; color: var(--navy-soft); }
+
+  .hero-img { margin-top: 28px; border-radius: 4px; overflow: hidden; border: 1px solid var(--line); }
+  figure { margin: 0; }
+  figcaption { font-size: 12px; color: var(--navy-soft); margin-top: 8px; }
+
+  section { padding: 44px 0; border-top: 1px solid var(--line); }
+  .section-head { margin-bottom: 22px; }
+  .section-head h2 { font-size: 22px; font-weight: 600; }
+  section p { color: var(--navy-soft); max-width: 66ch; margin-top: 10px; }
+  section ul { margin-top: 10px; padding-left: 20px; color: var(--navy-soft); max-width: 62ch; }
+  section li { margin-bottom: 6px; }
+
+  .role-note {
+    background: var(--white); border-left: 3px solid var(--amber);
+    padding: 16px 20px; margin-top: 20px; font-size: 14px; color: var(--navy-soft); max-width: 62ch;
+  }
+  .role-note strong { color: var(--navy); }
+
+  .dp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 20px; }
+  .dp-card { background: var(--white); border-left: 3px solid var(--amber); padding: 22px 24px; }
+  .dp-card h3 { font-size: 16px; font-weight: 600; }
+  .dp-card .role { font-size: 12px; color: var(--amber-deep); margin: 4px 0 12px; }
+  .dp-card ul { padding-left: 18px; margin-top: 0; }
+  .dp-card li { font-size: 14px; color: var(--navy-soft); margin-bottom: 6px; }
+  .dp-grid figure { margin-top: 14px; }
+
+  .iter-list { margin-top: 20px; display: flex; flex-direction: column; gap: 28px; }
+  .iter { display: grid; grid-template-columns: 220px 1fr; gap: 24px; align-items: start; }
+  .iter img { border-radius: 4px; border: 1px solid var(--line); }
+  .iter .tag { font-size: 12px; color: var(--amber-deep); font-weight: 500; margin-bottom: 4px; }
+  .iter h3 { font-size: 16px; font-weight: 600; }
+  .iter p { margin-top: 6px; font-size: 14px; }
+
+  .img-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 20px; }
+  .img-grid.three { grid-template-columns: 1fr 1fr 1fr; }
+
+  video { width: 100%; border-radius: 4px; border: 1px solid var(--line); margin-top: 20px; background: #000; }
+
+  table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 14px; }
+  th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--line); }
+  th { color: var(--amber-deep); font-weight: 600; font-size: 12px; }
+  td { color: var(--navy-soft); }
+  .result-row { display: flex; gap: 32px; margin-top: 24px; flex-wrap: wrap; }
+  .result .val { font-family: 'Fraunces', serif; font-size: 26px; font-weight: 600; color: var(--navy); }
+  .result .label { font-size: 13px; color: var(--navy-soft); max-width: 20ch; }
+
+  footer { padding: 40px 0 60px; }
+  footer .wrap { display: flex; justify-content: space-between; font-size: 13px; color: var(--navy-soft); }
+
+  @media (max-width: 640px) {
+    .p-hero h1 { font-size: 28px; }
+    .dp-grid, .img-grid, .img-grid.three { grid-template-columns: 1fr; }
+    .iter { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <a class="brand" href="index.html">Bailey Kinney</a>
+    <nav>
+      <ul>
+        <li><a href="index.html#projects">Projects</a></li>
+        <li><a href="index.html#experience">Experience</a></li>
+        <li><a href="index.html#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <a class="back-link" href="index.html#projects">← Back to projects</a>
+
+  <div class="p-hero">
+    <div class="eyebrow">Bot Bash · ENG-103 · 2025</div>
+    <h1>Rescue and navigation robotics</h1>
+    <p class="dek">A two-part robotics competition: build robots to rescue stranded figures across an obstacle course, then build a fully autonomous rover to carry a figure through a maze without any operator input. Team of four, with Bailey as team lead.</p>
+    <div class="stack">
+      <span class="chip">SolidWorks</span>
+      <span class="chip">Excel motor-speed analysis</span>
+      <span class="chip">Python</span>
+      <span class="chip">3D printing + laser cutting</span>
+      <span class="chip">IR sensor control logic</span>
+    </div>
+
+    <div class="hero-img">
+      <img src="assets/bb-rescue-final-front.png" alt="Final rescue robot with servo-driven sweep arm and onboard basket">
+    </div>
+
+    <div class="role-note">
+      <strong>My role:</strong> team lead. I did the majority of the CAD work and the programming — control logic for both the remote-operated robots and the autonomous IR-sensor rover — plus testing, formatting, and presenting our results.
+    </div>
+  </div>
+
+  <section>
+    <div class="section-head">
+      <div class="eyebrow">The challenge</div>
+      <h2>Two design problems, one course</h2>
+    </div>
+    <div class="dp-grid">
+      <div class="dp-card">
+        <h3>DP1 — Rescue robots</h3>
+        <div class="role">Remote-operated, human-controlled</div>
+        <ul>
+          <li>Rescue stranded figures across a set course</li>
+          <li>Max of 3 robots, 4-minute time limit</li>
+          <li>Cross a 1.5-inch speed bump and a lava gap between two 3.25-inch ramps</li>
+          <li>Avoid the lava area completely</li>
+        </ul>
+        <figure>
+          <img src="assets/bb-course-dp1.png" alt="Design challenge 1 course diagram showing lava, ramps, speed bump, and stranded figure locations">
+        </figure>
+      </div>
+      <div class="dp-card">
+        <h3>DP2 — Autonomous rover</h3>
+        <div class="role">Fully autonomous, no operator</div>
+        <ul>
+          <li>Transport a rescued figure through a 3-turn maze</li>
+          <li>2-minute time limit</li>
+          <li>Run completely autonomously, no manual control</li>
+          <li>Stop within accuracy tolerance at the destination edge</li>
+        </ul>
+        <figure>
+          <img src="assets/bb-course-dp2.png" alt="Design challenge 2 maze course diagram with zones and start point">
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <div class="eyebrow">Concept selection</div>
+      <h2>Screening before building</h2>
+    </div>
+    <p>Before committing to any single mechanism, we scored multiple concepts against weighted criteria for each robot — ease of manufacturing, ease of use, accuracy, maneuverability, and how many people each design could carry or how fast it could deploy. The arm-based rescue bot and the mega bridge design came out ahead and became our starting points.</p>
+    <div class="img-grid">
+      <figure>
+        <img src="assets/bb-matrix-rescue.png" alt="Rescue robot concept screening matrix comparing box bot, claw rescue, crane bot, bucket bot, and arm bot">
+        <figcaption>Rescue mechanism screening matrix — arm bot ranked highest.</figcaption>
+      </figure>
+      <figure>
+        <img src="assets/bb-matrix-bridge.png" alt="Bridge robot concept screening matrix comparing bridge drop, rotating bridge, crane bot, and mega bridge">
+        <figcaption>Bridge mechanism screening matrix — mega bridge ranked highest.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <div class="eyebrow">Iteration</div>
+      <h2>From sketch to failure to fix</h2>
+    </div>
+    <p>Every mechanism went through multiple failed builds before we landed on something reliable. Here's the path for both robots, roughly in order.</p>
+
+    <div class="iter-list">
+      <div class="iter">
+        <img src="assets/bb-sketch-bridge-drop.jpg" alt="Hand sketch of the bridge drop bot concept with lever mechanism">
+        <div>
+          <div class="tag">Bridge concept 1</div>
+          <h3>Bridge drop bot</h3>
+          <p>Early concept using a lever/piston to push bridge material up and over into place. Simple in theory, but hard to control precisely with a single actuator.</p>
+        </div>
+      </div>
+      <div class="iter">
+        <img src="assets/bb-sketch-rotating-arm.jpg" alt="Hand sketch of the rotating arms bridge bot concept">
+        <div>
+          <div class="tag">Bridge concept 2</div>
+          <h3>Rotating-arm bridge bot</h3>
+          <p>Replaced the piston with servo-driven rotating arms to lower the bridge more predictably, sketched out with a top-view servo layout.</p>
+        </div>
+      </div>
+      <div class="iter">
+        <img src="assets/bb-bridge-early.png" alt="Early bridge robot prototype with basic servo arm, no obstacle-clearing wheel">
+        <div>
+          <div class="tag">Bridge build, early</div>
+          <h3>First bridge robot</h3>
+          <p>Struggled to clear the initial speed bump — the front geometry wasn't tall enough to ride over it cleanly.</p>
+        </div>
+      </div>
+      <div class="iter">
+        <img src="assets/bb-sketch-long-bridge.png" alt="Hand sketch of a long bridge with stationary and lowering sections">
+        <div>
+          <div class="tag">Bridge concept 3</div>
+          <h3>Long bridge, redesigned</h3>
+          <p>Reworked the bridge geometry with a stationary center section and lowering ends on brackets, aiming for a more stable placement across the gap.</p>
+        </div>
+      </div>
+      <div class="iter">
+        <img src="assets/bb-bridge-final-front.png" alt="Final bridge robot front view with larger obstacle-clearing wheel and dual servos">
+        <div>
+          <div class="tag">Bridge build, final</div>
+          <h3>Final bridge robot</h3>
+          <p>Added a much larger cylindrical front wheel and lowered the servo mounts to clear the bump reliably, with dual servos handling deployment.</p>
+        </div>
+      </div>
+      <div class="iter">
+        <img src="assets/bb-sketch-arm-rescue.jpg" alt="Hand sketch of arm rescue bot with conveyor system to move passenger box">
+        <div>
+          <div class="tag">Rescue concept 1</div>
+          <h3>Arm rescue bot</h3>
+          <p>Used a pull-bar and conveyor system to move a walled passenger box toward the stranded figure. Mechanically complex for what it needed to do.</p>
+        </div>
+      </div>
+      <div class="iter">
+        <img src="assets/bb-sketch-claw.jpg" alt="Hand sketch of a claw rescue mechanism, side view and top view">
+        <div>
+          <div class="tag">Rescue concept 2</div>
+          <h3>Claw rescue bot</h3>
+          <p>Swapped to a servo-driven claw meant to grip and lift figures directly. Cardboard and popsicle-stick mockups gave way to a 3D-printed version.</p>
+        </div>
+      </div>
+      <div class="iter">
+        <img src="assets/bb-rescue-failed-2.jpg" alt="Failed claw rescue bot prototype photo on green background">
+        <div>
+          <div class="tag">Rescue build, failed</div>
+          <h3>Claw prototype, built and tested</h3>
+          <p>Alignment and claw width made pickup unreliable in practice — the mechanism worked on paper but not consistently on the course.</p>
+        </div>
+      </div>
+      <div class="iter">
+        <img src="assets/bb-sketch-head-attach.jpg" alt="Hand sketch of a hammer-and-swivel rescue attachment concept">
+        <div>
+          <div class="tag">Rescue concept 3</div>
+          <h3>Swivel-mount attachment</h3>
+          <p>Explored a hammer-style attachment on a swiveling base, weighted for balance. Ultimately too complex to fabricate reliably in the time we had.</p>
+        </div>
+      </div>
+      <div class="iter">
+        <img src="assets/bb-rescue-failed-1.png" alt="Failed initial arm-based rescue robot with labeled servo tower and holding arm">
+        <div>
+          <div class="tag">Rescue build, failed</div>
+          <h3>Arm bot, first build</h3>
+          <p>A rotating tower with an arm to hold and secure the figure. Functional concept, but the pickup mechanism still wasn't consistent enough to trust in competition.</p>
+        </div>
+      </div>
+      <div class="iter">
+        <img src="assets/bb-rescue-final-front.png" alt="Final rescue robot with servo-driven sweep arm pushing figures into an onboard basket">
+        <div>
+          <div class="tag">Rescue build, final</div>
+          <h3>Sweep-arm rescue bot</h3>
+          <p>Replaced the lifting/gripping approach entirely with a simpler servo-driven sweep arm that pushed figures into a laser-cut basket. Less elegant, far more reliable — this is what we ran in competition.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <div class="eyebrow">Autonomy extension</div>
+      <h2>Building the maze rover</h2>
+    </div>
+    <p>For DP2, a separate robot ran the maze with zero manual input. Control logic ran on three Sharp IR sensors with failsafes and a turn counter, mounted through a custom SolidWorks bracket.</p>
+    <div class="img-grid three">
+      <figure>
+        <img src="assets/bb-ir-holder-drawing.png" alt="SolidWorks technical drawing of the custom IR sensor holder bracket">
+        <figcaption>Custom IR sensor bracket, SolidWorks drawing.</figcaption>
+      </figure>
+      <figure>
+        <img src="assets/bb-auto-initial.jpg" alt="Autonomous robot in initial build stage showing wiring and battery pack">
+        <figcaption>Initial build, wiring and battery pack.</figcaption>
+      </figure>
+      <figure>
+        <img src="assets/bb-auto-final.png" alt="Finished autonomous rover with sensor flag mount">
+        <figcaption>Finished autonomous rover.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <div class="eyebrow">Technical implementation</div>
+      <h2>How it was built</h2>
+    </div>
+    <ul>
+      <li><strong style="color:var(--navy)">Mechanical:</strong> 3D-printed wheel and mechanism parts; laser-cut bridge and basket components</li>
+      <li><strong style="color:var(--navy)">Controls:</strong> Raspberry Pi Pico, Kitronik motor shield, Wi-Fi connection, phone-based remote control</li>
+      <li><strong style="color:var(--navy)">Software:</strong> Python scripts mapping controller inputs to wheel and servo behavior</li>
+      <li><strong style="color:var(--navy)">Validation:</strong> SolidWorks CAD and Excel motor-speed analysis before every build</li>
+    </ul>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <div class="eyebrow">Results</div>
+      <h2>How it performed</h2>
+    </div>
+    <div class="result-row">
+      <div class="result"><div class="val">1:04</div><div class="label">recorded run time, all objectives met</div></div>
+      <div class="result"><div class="val">5th</div><div class="label">overall placement</div></div>
+      <div class="result"><div class="val">1st</div><div class="label">in presentation, award received</div></div>
+    </div>
+    <table>
+      <thead><tr><th>Robot</th><th>Criteria</th><th>Result</th></tr></thead>
+      <tbody>
+        <tr><td>Bridge bot</td><td>Clears speed bump (1st)</td><td>5 / 5 pts</td></tr>
+        <tr><td>Bridge bot</td><td>Deploys bridge</td><td>20 / 20 pts</td></tr>
+        <tr><td>Bridge bot</td><td>Places bridge on notch</td><td>20 / 20 pts</td></tr>
+        <tr><td>Bridge bot</td><td>Clears speed bump (2nd)</td><td>5 / 5 pts</td></tr>
+        <tr><td>Rescue bot</td><td>Clears speed bump (1st)</td><td>5 / 5 pts</td></tr>
+        <tr><td>Rescue bot</td><td>Traverses notch</td><td>10 / 10 pts</td></tr>
+        <tr><td>Rescue bot</td><td>Retrieves stranded figure</td><td>20 / 20 pts</td></tr>
+        <tr><td>Rescue bot</td><td>Clears speed bump (2nd)</td><td>5 / 5 pts</td></tr>
+        <tr><td>Rescue bot</td><td>Returns figure to start</td><td>10 / 10 pts</td></tr>
+      </tbody>
+    </table>
+    <img src="assets/bb-scoring-curve.png" alt="Points versus elapsed time scoring curve, points decrease from 50 to 10 over 240 seconds" style="margin-top:20px; border:1px solid var(--line); border-radius:4px;">
+    <p style="font-size:13px; margin-top:8px;">Scoring rewarded speed — full marks up to 30 seconds, decreasing steadily after. Our 1:04 total run cost points on time even with every objective completed.</p>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <div class="eyebrow">Competition run</div>
+      <h2>The robots in action</h2>
+    </div>
+    <video controls preload="metadata">
+      <source src="assets/bb-comp-run.mp4" type="video/mp4">
+    </video>
+    <p style="font-size:13px;">Raw footage from the competition run, not a polished highlight reel — includes the full sequence from bridge deployment through figure retrieval.</p>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <div class="eyebrow">Takeaways</div>
+      <h2>What this project proved</h2>
+    </div>
+    <ul>
+      <li>Turned failed prototypes into simpler, more reliable mechanisms rather than adding complexity to fix them</li>
+      <li>Combined CAD, digital fabrication, electronics, and software into one working system</li>
+      <li>Used weighted screening criteria instead of picking concepts by gut feel</li>
+      <li>Led a team of four through iteration, testing, and a live competition presentation</li>
+    </ul>
+  </section>
+
+</div>
+
+<footer>
+  <div class="wrap">
+    <span>Bailey Kinney · Springfield, MA</span>
+    <a href="index.html#contact">Get in touch →</a>
+  </div>
+</footer>
+
+</body>
+</html>
